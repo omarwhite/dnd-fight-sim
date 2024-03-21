@@ -1,7 +1,6 @@
 # dnd-fight-sim
 Simulating PVP combats between two specific DND characters
 
-Notes:
 - Things that must be modeled
 	- Distance
 		- In melee or in ranged combat
@@ -110,7 +109,7 @@ Notes:
 	- Initiative Phase
 		- At beginning, both characters roll with bonuses applied
 			- Higher roll goes first
-	- Turn enum
+	- Turn boolean
 		- 1 for first in initiative
 		- 2 for second in initiative
 	- Turn phases
@@ -337,5 +336,73 @@ Notes:
 		- How many combats we run
 	- Optimal Behavior
 		- Default case
+			- Dodge
 		- Cases at certain ranges
 		- Cases depending on amount of resources 
+		- Assumed behavior
+			- Always shield if it will avoid an attack
+			- Always go for your highest base damage attack available
+		- Renn Behavior
+			- If invis
+				- Use See invisibility
+				- Move closer
+					- Use feystep if necessary and available
+				- Use reaction attack if within range and health is lower than eva's
+					- Smite if eva's health is 21 or less or if mutual suffering has been used
+			- Else
+				- If !canSee
+					- Use dash
+					- Use feystep if available
+					- Use reaction attack if within range and health is lower than eva's or if eva's health is 21 or less
+						- Smite if eva's health is 21 or less or if mutual suffering has been used
+				- Else
+					- If health < 10 and Shadow of moil is active
+						- Use movement until distance == 10 if within 5ft, if outside melee range use movement until distance <= 30 or movement == 0
+							- If not enough, use feystep if available
+							- if distance == 30 and javelins available
+								- javelin attack
+								- else just dodge
+					- Else
+						- If difference between max hp and currrent hp > 30
+							- Use lay on hands
+							- Move closer if possible
+							- If distance > 5 
+								- Use movement until distance == 5 or movement == 0
+									- If distance == 5
+										- Use Reaction Attack
+											- Smite if eva's health is 21 or less or if mutual suffering has been used
+									- If movement == 0
+										- Use feystep if available
+						- If distance > 60
+							- Use Dash
+								- covers 60 distance
+							- Use feystep if available
+								- covers 30 distance
+							- Use reaction attack if within range and health is lower than eva's or if eva's health is 21 or less
+								- Smite if eva's health is 21 or less or if mutual suffering has been used
+						- Else if distance > 30
+							- Use movement until distance == 35 if feystep available
+								- Use feystep 
+									- Use Reaction if health is lower than eva's or if eva's health is 21 or less
+										- Smite if eva's health is 21 or less
+									- Use Attack action
+										- Smite if eva's health is 21 or less
+						- Else if distance < 30 but > 5
+							- If shadow of moil is active use anticipate weakness
+							- Use movement until distance == 5
+								- Use reaction attack if health is lower than eva's or if eva's health if 21 or less
+									- Smite if eva's health is 21 or less
+								- Use Attack action
+									- Smite if eva's health is 21 or less
+								- If bonus action available use Bonus Action attack
+									- Smite if eva's health is 21 or less
+						- Else if distance == 5
+							- If shadow of moil is active use anticipate weakness
+							- Use Attack action
+								- Smite if eva's health is 21 or less or if mutual suffering has been used
+							- If bonus action is available
+								- Use Bonus Action attack
+									- Smite if eva's health is 21 or less or if mutual suffering has been used
+							- If your health is lower than Eva's or eva's health is 21 or less
+								- move 5 away and 5 back to trigger Reaction attack
+									- Smite if eva's health is 21 or less or if mutual suffering has been used

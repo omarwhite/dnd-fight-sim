@@ -25,6 +25,8 @@ public class combatantObject {
     private int javelins = 0;
     private int mutSuff = 0;
     private int sanBur = 0;
+    private boolean invis = false;
+    private boolean som = false;
 
     // Constructor
     public combatantObject( int hp,
@@ -171,6 +173,14 @@ public class combatantObject {
         return sanBur;
     }
 
+    public boolean isInvis() {
+        return invis;
+    }
+
+    public boolean isSom() {
+        return som;
+    }
+
     // Setters
     public void setHp(int hp) {
         this.hp = hp;
@@ -274,5 +284,13 @@ public class combatantObject {
 
     public void setSanBur(int sanBur) {
         this.sanBur = sanBur;
+    }
+
+    public void setInvis(boolean invis) {
+        this.invis = invis;
+    }
+
+    public void setSom(boolean som) {
+        this.som = som;
     }
 }

@@ -39,7 +39,7 @@ public class main {
     }
 
     //basic attack function
-    public void Attack(int hitMod, int dmgMod, int src1Dice, int src1Die, int src2Dice, int src2Die, combatantObject target, int adv){
+    public void Attack(int hitMod, int dmgMod, int src1Dice, int src1Die, int src2Dice, int src2Die, combatantObject attacker, combatantObject target, int adv){
         Random rand = new Random();//initializing rng
         int rand1 = (rand.nextInt(19) + 1);
         int rand2 = (rand.nextInt(19) + 1);//two rolls, in case advantage or disadvantage is involved
@@ -65,43 +65,57 @@ public class main {
         }
         
 
-        if(toHit > target.getAC() && toHit - hitMod != 20){ //if attack roll hits before shield and is not a crit
+        if (toHit > target.getAC() && toHit - hitMod != 20){ //if attack roll hits before shield and is not a crit
             if(toHit < target.getAC() + 5 && target.isReaction()){ //if shield would block the attack and the target has a reaction
-                if(target.isRennOrEva() && target.getSlots() > 0){//if target is eva and has spell slots
-
-                    if (target.getL1Slots() > 0) {//use lv 1 slots if available
-                        target.setL1Slots(target.getL1Slots() - 1);
-                    }
-                    else if (target.getL2Slots() > 0) {//use lv 2 slots if available
-                        target.setL2Slots(target.getL2Slots() - 1);
-                    }
-                    else if (target.getL3Slots() > 0) {//use lv 3 slots if available
-                        target.setL3Slots(target.getL3Slots() - 1);
-                    }
-                    else if (target.getL4Slots() > 0) {//use lv 4 slots if available
-                        target.setL4Slots(target.getL4Slots() - 1);
-                    }
-
-                    target.setAC(target.getAC() + 5);
-                    target.setReaction(false);
-                }
-
-                else if (!target.isRennOrEva() && target.getSpellPoints() >= 2 && target.isReaction()) {//if target is renn and has reaction and enough spell points for shield
-                    target.setSpellPoints(target.getSpellPoints() - 2);//subtract 2 spell points
-                    target.setAC(target.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
-                    target.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
+                if(target.getSlots() > 0 || target.getSpellPoints() >= 2){//if target is eva and has spell slots
+                    Shield(target.isRennOrEva(), target);                    
                 }
             }
             else{
-                int dmgTotal = dmgMod;//number for storing all the damage
-                for (int i = 0; i < src1Dice; i++){
-                    dmgTotal += rand.nextInt(src1Die - 1) + 1;//rolling damage for damage source 1 and adding it to the total
-                }
-                for (int i = 0; i < src2Dice; i++){
-                    dmgTotal += rand.nextInt(src2Die - 1) + 1;//rolling damage for damage source 2 and adding it to the total
-                }
-                target.setHp(target.getHp() - dmgTotal);
+                damageCalc(dmgMod, src1Dice, src1Die, src2Dice, src2Die, target);
             }
+        }
+        else if (toHit > target.getAC() && toHit - hitMod == 20 && target.isRennOrEva()) {
+            damageCalc(dmgMod, 2 * src1Dice, src1Die, 2 * src2Dice, src2Die, target);
+        }
+    }
+
+    public void damageCalc(int dmgMod, int src1Dice, int src1Die, int src2Dice, int src2Die, combatantObject target) {
+        Random rand = new Random();//initializing rng
+
+        int dmgTotal = dmgMod;//number for storing all the damage
+        for (int i = 0; i < src1Dice; i++){
+            dmgTotal += rand.nextInt(src1Die - 1) + 1;//rolling damage for damage source 1 and adding it to the total
+        }
+        for (int i = 0; i < src2Dice; i++){
+            dmgTotal += rand.nextInt(src2Die - 1) + 1;//rolling damage for damage source 2 and adding it to the total
+        }
+
+        target.setHp(target.getHp() - dmgTotal);
+    }
+
+    public void Shield(boolean evaOrRenn, combatantObject target) {
+        if (evaOrRenn){
+            if (target.getL1Slots() > 0) {//use lv 1 slots if available
+                target.setL1Slots(target.getL1Slots() - 1);
+            }
+            else if (target.getL2Slots() > 0) {//use lv 2 slots if available
+                target.setL2Slots(target.getL2Slots() - 1);
+            }
+            else if (target.getL3Slots() > 0) {//use lv 3 slots if available
+                target.setL3Slots(target.getL3Slots() - 1);
+            }
+            else if (target.getL4Slots() > 0) {//use lv 4 slots if available
+                target.setL4Slots(target.getL4Slots() - 1);
+            }
+
+            target.setAC(target.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
+            target.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
+        }
+        else{
+            target.setSpellPoints(target.getSpellPoints() - 2);//subtract 2 spell points
+            target.setAC(target.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
+            target.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
         }
     }
 }
