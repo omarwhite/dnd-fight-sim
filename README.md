@@ -4,7 +4,7 @@ Simulating PVP combats between two specific DND characters
 - Things that must be modeled
 	- Distance
 		- In melee or in ranged combat
-			- This will be an enum
+			- ~~This will be an enum~~
 		- Distance will be Numbers
 	- Stats
 		- 6 stats
@@ -122,11 +122,11 @@ Simulating PVP combats between two specific DND characters
 	- Attack functions
 		- Mod to hit
 		- Damage dice
-			- Damage type
-				- Elemental or Non-elemental
-					- Number that ranges from 0 to 1
-						- 0 is non-elemental
-						- 1 is elemental
+			- ~~Damage type~~
+				- ~~Elemental or Non-elemental~~
+					- ~~Number that ranges from 0 to 1~~
+						- ~~0 is non-elemental~~
+						- ~~1 is elemental~~
 		- Damage bonus
 		- Advantage/Disadvantage
 			- Number attached to `Attack Functions`
@@ -170,7 +170,7 @@ Simulating PVP combats between two specific DND characters
 				- `Ranged Action Attack`
 					- `+8`
 					- `1d6`
-					- `+11`
+					- `+10`
 					- `120 ft`
 						- Apply `Disadvantage` if `Distance > 30 ft`
 					- `1 action`
@@ -242,18 +242,18 @@ Simulating PVP combats between two specific DND characters
 					- `0`
 					- `5 ft`
 					- `1 action and 1 3rd Lv spell slot`
-	- Bonus array
-		- Every roll gets a bonus array
-		- 2d array
-		- Two kinds of bonuses
-			- Permanent
-			- Perishable
-		- Every element has
-			- Bonus number
-			- 0-2
-				- 0 is Permanent
-				- 1 is One-Time
-				- 2 is Concentration
+	- ~~Bonus array~~
+		- ~~Every roll gets a bonus array~~
+		- ~~2d array~~
+		- ~~Two kinds of bonuses~~
+			- ~~Permanent~~
+			- ~~Perishable~~
+		- ~~Every element has~~
+			- ~~Bonus number~~
+			- ~~0-2~~
+				- ~~0 is Permanent~~
+				- ~~1 is One-Time~~
+				- ~~2 is Concentration~~
 	- Action functions
 		- Effect on use
 		- Cost
@@ -298,8 +298,8 @@ Simulating PVP combats between two specific DND characters
 					- Gives `Invisibility` to Eva
 					- `1 Action`
 					- `Middle`
-				- Sanguine Burst
-					- Rerolls a Damage Die for a 1st Level or higher Spell Attack
+				- ~~Sanguine Burst~~ Not really an action, implement in attack function
+					- ~~Rerolls a Damage Die for a 1st Level or higher Spell Attack~~
 	- Preparation settings
 		- Effect on use
 		- Cost
@@ -406,3 +406,5 @@ Simulating PVP combats between two specific DND characters
 							- If your health is lower than Eva's or eva's health is 21 or less
 								- move 5 away and 5 back to trigger Reaction attack
 									- Smite if eva's health is 21 or less or if mutual suffering has been used
+         	- Eva Behavior
+          		- 
