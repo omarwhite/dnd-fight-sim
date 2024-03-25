@@ -50,6 +50,7 @@ public class combatantObject {
         this.concentration = false;
 
         if (rennOrEva){
+            this.saveDC = 14;
             this.l1Slots = 4;
             this.l2Slots = 3;
             this.l3Slots = 3;
@@ -58,6 +59,7 @@ public class combatantObject {
             this.sanBur = 5;
         }
         else{
+            this.saveDC = 17;
             this.spellPoints = 17;
             this.feyStep = 3;
             this.layOnHands = 1;
