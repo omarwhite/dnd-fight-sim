@@ -27,6 +27,8 @@ public class combatantObject {
     private int sanBur = 0;
     private boolean invis = false;
     private boolean som = false;
+    private boolean poisoned = false;
+    private boolean hadar = false;
 
     // Constructor
     public combatantObject( int hp,
@@ -183,6 +185,14 @@ public class combatantObject {
         return som;
     }
 
+    public boolean isPoisoned() {
+        return poisoned;
+    }
+
+    public boolean isHadar() {
+        return hadar;
+    }
+
     // Setters
     public void setHp(int hp) {
         this.hp = hp;
@@ -294,5 +304,13 @@ public class combatantObject {
 
     public void setSom(boolean som) {
         this.som = som;
+    }
+
+    public void setPoisoned(boolean poisoned) {
+        this.poisoned = poisoned;
+    }
+
+    public void setHadar(boolean hadar) {
+        this.hadar = hadar;
     }
 }

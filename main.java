@@ -12,7 +12,7 @@ public class main {
         int rennAC = 20;
         
         combatantObject Eva = new combatantObject(84, evaAC, 0, 2, 4, 5, 1, 1, true);//declaring eva
-        combatantObject Renn = new combatantObject(76, rennAC, 5, 0, 3, 0, -1, 3, false);//declaring renn
+        combatantObject Renn = new combatantObject(76, rennAC, 5, 0, 3, 0, 2, 3, false);//declaring renn
 
         Random rand = new Random();//initializing rng
         int rennInit = (rand.nextInt(19) + 1) + Renn.getDex() + (rand.nextInt(7) + 1);//rolling initiative for renn
@@ -224,8 +224,8 @@ public class main {
     }
 
     public void rayOfSickness(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        attacker.setAction(false);
-        switch (slotUsed) {
+        attacker.setAction(false);//use action
+        switch (slotUsed) {//deduct spell slot
             case 1:
                 attacker.setL1Slots(attacker.getL1Slots() - 1);
                 break;
@@ -239,8 +239,92 @@ public class main {
                 attacker.setL4Slots(attacker.getL4Slots() - 1);
                 break;
         }
-        if (Attack(9, 0, 2 + (slotUsed - 1), 8, 0, 0, attacker, target, adv, slotUsed)){
-            
+        if (Attack(9, 0, 2 + (slotUsed - 1), 8, 0, 0, attacker, target, adv, slotUsed)){//if attack hits. also, attack made with slot usage accounted for
+            Random rand = new Random();//initializing RNG
+            if(rand.nextInt(19) + 1 + target.getCon() + target.getCha() < attacker.getSaveDC()){//rolling d20 + con mod + cha mod for aura of protection, if roll fails then it triggers the effect
+                target.setPoisoned(true);//target is poisoned if save fails
+            }
+        }
+    }
+
+    public void hungerOfHadar(combatantObject attacker, combatantObject target, int slotUsed){
+        attacker.setAction(false);//use action
+
+        Random rand = new Random();//initialize RNG
+        int dmgTotal = 0;//initialize dmgTotal
+        dmgTotal += rand.nextInt(5) + rand.nextInt(5) + 2;//dmgTotal = 2d6
+
+        target.setHp(target.getHp() - dmgTotal);//subtract dmgTotal from target's hp
+        target.setHadar(true);//account for target now being in the hunger of hadar
+    }
+
+    public void tollTheDead(combatantObject attacker, combatantObject target){
+        attacker.setAction(false);//use action
+        Random rand = new Random();//initializing rng
+        if(rand.nextInt(19) + 1 + target.getWis() + target.getCha() < attacker.getSaveDC()){//if Renn fails a con save. formula is d20 + con mod + aura of protection
+            target.setHp(target.getHp() - (rand.nextInt(11) + rand.nextInt(11) + 2));//subtract hp from target
+        }
+    }
+
+    public void rennReaction(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
+        attacker.setReaction(false);//use reaction
+
+        if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
+            attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+        }
+    }
+
+    public void rennAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
+        attacker.setAction(false);//use action
+
+        for(int i = 0; i < 2; i++){//do it twice
+            if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
+                attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+            }
+        }
+    }
+
+    public void rennRangedAttack(combatantObject attacker, combatantObject target, int adv){
+        attacker.setAction(false);
+        attacker.setJavelins(attacker.getJavelins() - 2);
+
+        for(int i = 0; i < 2; i++){//do it twice
+            Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0);//make attack roll.
+        }
+    }
+
+    public void rennBonusAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
+        attacker.setBonusAction(false);//use bonus action
+
+        if(Attack(9, 11, 1, 4, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
+            attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+        }
+    }
+
+    public void layOnHands(combatantObject caster){
+        caster.setAction(false);//use action
+        if(caster.getHp() <= 36){//if renn's hp is less than or equal to 36
+            caster.setHp(caster.getHp() + 40);//use all 40 lay on hands points
+            caster.setLayOnHands(0);//set layonhands to 0
+        }
+        else{
+            caster.setLayOnHands(0);;//otherwise, set layonhands to 0 and renn's hp to 76
+            caster.setHp(76);
+        }
+    }
+
+    public int feyStep(combatantObject caster, combatantObject target, int distance){
+        caster.setBonusAction(false);//use bonus action
+        caster.setFeyStep(caster.getFeyStep() - 1);//use feystep
+
+        if (distance < 30){
+            distance = 5;
+            target.setHp(target.getHp() - 3);
+            return distance;
+        }
+        else {
+            distance -= 30;
+            return distance;
         }
     }
 }
