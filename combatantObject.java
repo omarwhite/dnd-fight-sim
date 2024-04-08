@@ -29,6 +29,8 @@ public class combatantObject {
     private boolean som = false;
     private boolean poisoned = false;
     private boolean hadar = false;
+    private boolean bless = false;
+    private boolean magicWeapon = false;
 
     // Constructor
     public combatantObject( int hp,
@@ -193,6 +195,14 @@ public class combatantObject {
         return hadar;
     }
 
+    public boolean isBless() {
+        return bless;
+    }
+
+    public boolean isMagicWeapon() {
+        return magicWeapon;
+    }
+
     // Setters
     public void setHp(int hp) {
         this.hp = hp;
@@ -312,5 +322,21 @@ public class combatantObject {
 
     public void setHadar(boolean hadar) {
         this.hadar = hadar;
+    }
+
+    public void setBless(boolean bless) {
+        this.bless = bless;
+    }
+
+    public void setMagicWeapon(boolean magicWeapon) {
+        this.magicWeapon = magicWeapon;
+    }
+
+    public void loseConcentration(){
+        this.concentration = false;
+        
+        this.som = false;
+        this.bless = false;
+        this.magicWeapon = false;
     }
 }
