@@ -407,4 +407,28 @@ Simulating PVP combats between two specific DND characters
 								- move 5 away and 5 back to trigger Reaction attack
 									- Smite if eva's health is 21 or less or if mutual suffering has been used
          	- Eva Behavior
-          		- 
+          		-  First turn
+	          		- Use Invis and move away
+	          	- Next turn
+		          	- If still invis
+			          	- Use Blood shot if 30 ft away, Shadow of Moil if at melee range
+			      - If not
+				      - If Renn's reaction has been used
+					      - Move away
+					      - If at melee range and have Spell Slots of 4th Level
+						      - Use Shadow of Moil
+						      - If Spell Slots but not of 4th Level
+							      - Use Inflict Wounds at max slot
+						  - If at 30 ft and and have Spell Slots 2nd Lv or higher
+							  - Use Blood Shot at max slot
+						- If at 60 ft and have Spell Slots
+							- Use Ray of Sickness at max slot
+						- If farther than 60 ft and have Spell Slots of 3rd Level
+							- Use Hunger of Hadar
+							- If no 3rd Level Slots
+								- Move closer then use Ray of Sickness if possible
+									- If not possible use Toll the Dead
+						- If no spell slots and 60 ft or closer
+							- Use Toll the Dead
+							- If you take damage from Divine Smite
+								- Use mutual suffering

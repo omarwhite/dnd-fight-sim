@@ -20,7 +20,7 @@ public class main {
         int evaWins = 0;
 
         for(int i = 0; i < matches; i++){
-            combatantObject Eva = new combatantObject(112, evaAC, 0, 2, 4, 5, 1, 1, true);//declaring eva
+            combatantObject Eva = new combatantObject(112, 20, 0, 2, 4, 5, 1, 1, true);//declaring eva
             Eva.isRennOrEva();
             combatantObject Renn = new combatantObject(76, rennAC, 5, 0, 3, 0, 2, 3, false);//declaring renn
 
