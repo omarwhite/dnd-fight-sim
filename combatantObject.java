@@ -336,7 +336,6 @@ public class combatantObject {
     }
 
     public void loseConcentration(){
-        System.out.println("Drop concentration");
         this.concentration = false;
 
         this.som = false;

@@ -30,11 +30,9 @@ public class main {
 
             if(rennInit > evaInit){//if renn rolls higher, she goes first
                 turn = false;
-                System.out.println("Renn wins initiative.");
             }
             else{//if eva rolls higher, she goes first
                 turn = true;
-                System.out.println("Eva wins initiative.");
             }
 
             int round = 0;
@@ -53,8 +51,6 @@ public class main {
                 Renn.setMovement(30);
 
                 if(turn) {
-                    System.out.println("Eva's Turn");
-                    Eva.isRennOrEva();
                     round++;
                     //Eva behavior
                     if (round == 1){
@@ -481,8 +477,6 @@ public class main {
             attacker.setHp(attacker.getHp() - dmgTotal);
             target.setMutSuff(0);
         }
-
-        System.out.println("The attack deals " + dmgTotal + " damage");//printing damage for debugging purposes
         return dmgTotal;//return dmgTotal
     }
 
@@ -503,36 +497,26 @@ public class main {
 
             caster.setAC(caster.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
             caster.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
-            System.out.println("Eva uses shield");//debug message
         }
         else{
             caster.setSpellPoints(caster.getSpellPoints() - 2);//subtract 2 spell points
             caster.setAC(caster.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
             caster.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
-            System.out.println("Renn uses shield");//debug message
         }
     }
 
     //if Eva makes an opp attack
     public static void evaReaction(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        System.out.println("Eva uses her reaction to attack");
         attacker.setReaction(false);//use reaction
-        if(Attack(5, 2, 1, 4, 0, 0, attacker, target, adv, slotUsed)){//call attack method
-            System.out.println("Eva hits Renn with her reaction");
-        }
-        else{
-            System.out.println("Eva misses");
-        }
+        Attack(5, 2, 1, 4, 0, 0, attacker, target, adv, slotUsed);//call attack method        
     }
 
     //Sapping Sting
     public static void sappingSting(combatantObject attacker, combatantObject target){
-        System.out.println("Eva uses Sapping Sting");
         attacker.setAction(false);//use action
         Random rand = new Random();//initializing rng
         if(rand.nextInt(19) + 1 + target.getCon() + target.getCha() < attacker.getSaveDC()){//if Renn fails a con save. formula is d20 + con mod + aura of protection
             int dmgTotal = target.getHp() - (rand.nextInt(3) + rand.nextInt(3) + 2);
-            System.out.println("Renn fails the save, takes " + dmgTotal + " damage, and is knocked prone");
             target.setHp(dmgTotal);//subtract hp from target
             target.setMovement(target.getMovement() - 15);//target gets knocked prone, so subtract half movement
         }
@@ -540,103 +524,71 @@ public class main {
 
     //Blood Shot
     public static void bloodShot(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        System.out.println("Eva uses Blood Shot");
         attacker.setAction(false);//use action
         switch (slotUsed){//detrmine which level spell slot was used and subtract it
             case 2://if lv 2 slot used
-                System.out.println("At 2nd Level");
                 attacker.setL2Slots(attacker.getL2Slots() - 1);
                 break;
             case 3://if lv 3 slot used
-                System.out.println("At 3rd Level");
                 attacker.setL3Slots(attacker.getL3Slots() - 1);
                 break;
             case 4://if lv 4 slot used
-                System.out.println("At 4th Level");
                 attacker.setL4Slots(attacker.getL4Slots() - 1);
                 break;
             default://this should never be triggered
                 System.out.println("Something broke in bloodShot");
         }
-        if(Attack(9, 0, 2 + (slotUsed - 2), 10, 2, 8, attacker, target, adv, slotUsed)){//trigger attack method. adds damage dice based on slot level used
-            System.out.println("Eva hits Renn with Blood Shot");
-        }
-        else{
-            System.out.println("Eva misses");
-        }
+        Attack(9, 0, 2 + (slotUsed - 2), 10, 2, 8, attacker, target, adv, slotUsed);//trigger attack method. adds damage dice based on slot level used
     }
 
     //Inflict Wounds
     public static void inflictWounds(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        System.out.println("Eva uses Inflict Wounds");
         attacker.setAction(false);//use action
         switch (slotUsed){//determine which level spell slot was used and subtract it
             case 1://if lv 1 slot used
-                System.out.println("At 1st Level");
                 attacker.setL1Slots(attacker.getL1Slots() - 1);
                 break;
             case 2://if lv 2 slot used
-                System.out.println("At 2nd Level");
                 attacker.setL2Slots(attacker.getL2Slots() - 1);
                 break;
             case 3://if lv 3 slot used
-                System.out.println("At 3rd Level");
                 attacker.setL3Slots(attacker.getL3Slots() - 1);
                 break;
             case 4://if lv 4 slot used
-                System.out.println("At 4th Level");
                 attacker.setL4Slots(attacker.getL4Slots() - 1);
                 break;
             default://this should never be triggered
                 System.out.println("Something broke in inflictWounds");
         }
-        if(Attack(9, 0, 3 + (slotUsed - 1), 10, 0, 0, attacker, target, adv, slotUsed)){//trigger attack method. adds damage dice based on slot level used
-            System.out.println("Eva hits Renn with Inflict Wounds");
-        }
-        else{
-            System.out.println("Eva misses");
-        }
+        Attack(9, 0, 3 + (slotUsed - 1), 10, 0, 0, attacker, target, adv, slotUsed);//trigger attack method. adds damage dice based on slot level used
+
     }
 
     public static void rayOfSickness(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        System.out.println("Eva uses Ray of Sickness");
         attacker.setAction(false);//use action
         switch (slotUsed) {//deduct spell slot
             case 1://if lv 1 slot used
-                System.out.println("At 1st Level");
                 attacker.setL1Slots(attacker.getL1Slots() - 1);
                 break;
             case 2://if lv 2 slot used
-                System.out.println("At 2nd Level");
                 attacker.setL2Slots(attacker.getL2Slots() - 1);
                 break;
             case 3://if lv 3 slot used
-                System.out.println("At 3rd Level");
                 attacker.setL3Slots(attacker.getL3Slots() - 1);
                 break;
             case 4://if lv 4 slot used
-                System.out.println("At 4th Level");
                 attacker.setL4Slots(attacker.getL4Slots() - 1);
                 break;
         }
         if (Attack(9, 0, 2 + (slotUsed - 1), 8, 0, 0, attacker, target, adv, slotUsed)){//if attack hits. also, attack made with slot usage accounted for
-            System.out.println("Eva hits Renn with Ray of Sickness");
             Random rand = new Random();//initializing RNG
             if(rand.nextInt(19) + 1 + target.getCon() + target.getCha() < attacker.getSaveDC()){//rolling d20 + con mod + cha mod for aura of protection, if roll fails then it triggers the effect
                 target.setPoisoned(true);//target is poisoned if save fails
-                System.out.println("Renn fails the save and is poisoned");
             }
-            else{
-                System.out.println("Renn passes the Ray of Sickness save");
-            }
-        }
-        else{
-            System.out.println("Eva misses");
         }
     }
 
     public static void hungerOfHadar(combatantObject attacker, combatantObject target, int slotUsed){
-        System.out.println("Eva uses Hunger of Hadar");
         attacker.setAction(false);//use action
 
         Random rand = new Random();//initialize RNG
@@ -644,26 +596,19 @@ public class main {
         dmgTotal += rand.nextInt(5) + rand.nextInt(5) + 2;//dmgTotal = 2d6
 
         target.setHp(target.getHp() - dmgTotal);//subtract dmgTotal from target's hp
-        System.out.println("It deals " + dmgTotal + " damage");
         target.setHadar(true);//account for target now being in the hunger of hadar
     }
 
     public static void tollTheDead(combatantObject attacker, combatantObject target){
-        System.out.println("Eva uses Toll the Dead");
         attacker.setAction(false);//use action
         Random rand = new Random();//initializing rng
         if(rand.nextInt(19) + 1 + target.getWis() + target.getCha() < attacker.getSaveDC()){//if Renn fails a con save. formula is d20 + con mod + aura of protection
             int dmgTotal = rand.nextInt(11) + rand.nextInt(11) + 2;
             target.setHp(target.getHp() - dmgTotal);//subtract hp from target
-            System.out.println("Renn fails the save and takes " + dmgTotal + " damage");
-        }
-        else{
-            System.out.println("Renn passes the save");
         }
     }
 
     public static void shadowOfMoil(combatantObject caster){
-        System.out.println("Eva casts Shadow of Moil");//debug message
         caster.setAction(false);//use action
         caster.setL4Slots(caster.getL4Slots() - 1);//use level 4 slot
         caster.setSom(true);//set shadow of moil status to true
@@ -677,47 +622,35 @@ public class main {
         Random rand = new Random();//initializing rng
         int dmgTotal = rand.nextInt(7) + rand.nextInt(7) + 2;//roll 2d8 damage
         target.setHp(target.getHp() - dmgTotal);//subtract dmgTotal from hp
-        System.out.println("Renn takes " + dmgTotal + " damage from Shadow of Moil");//debug message
     }
 
     public static void invis(combatantObject caster){
-        System.out.println("Eva casts Invisibility");
         caster.setAction(false);
         caster.setInvis(true);
     }
 
     public static void rennReaction(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
-        System.out.println("Renn uses her reaction to attack");
         attacker.setReaction(false);//use reaction
 
         if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
-            System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
             attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
 
             if(target.isSom()){
                 somDamage(attacker);//deal damage to renn if shadow of moil is active
             }
         }
-        else{
-            System.out.println("Renn misses");
-        }
     }
 
     public static void rennAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
-        System.out.println("Renn uses her action to attack");
         attacker.setAction(false);//use action
 
         for(int i = 0; i < 2; i++){//do it twice
             if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
-                System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
                 attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
 
                 if(target.isSom()){
                     somDamage(attacker);//deal damage to renn if shadow of moil is active
                 }
-            }
-            else{
-                System.out.println("Renn misses");
             }
         }
 
@@ -725,39 +658,27 @@ public class main {
     }
 
     public static void rennRangedAttack(combatantObject attacker, combatantObject target, int adv){
-        System.out.println("Renn uses her javelins to attack");
         attacker.setAction(false);
         attacker.setJavelins(attacker.getJavelins() - 2);
 
         for(int i = 0; i < 2; i++){//do it twice
-            if(Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0)){//make attack roll.
-                System.out.println("Renn hits with a javelin");
-            }
-            else{
-                System.out.println("Renn misses");
-            }
+            Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0)//make attack roll.
         }
     }
 
     public static void rennBonusAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
-        System.out.println("Renn uses her bonus action to attack");
         attacker.setBonusAction(false);//use bonus action
 
         if(Attack(9, 11, 1, 4, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
-            System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
             attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
 
             if(target.isSom()){
                 somDamage(attacker);//deal damage to renn if shadow of moil is active
             }
         }
-        else{
-            System.out.println("Renn misses");
-        }
     }
 
     public static void layOnHands(combatantObject caster){
-        System.out.println("Renn uses Lay on Hands");
         caster.setAction(false);//use action
         if(caster.getHp() <= 36){//if renn's hp is less than or equal to 36
             caster.setHp(caster.getHp() + 40);//use all 40 lay on hands points
@@ -770,7 +691,6 @@ public class main {
     }
 
     public static int feyStep(combatantObject caster, combatantObject target, int distance){
-        System.out.println("Renn uses Feystep");
         caster.setBonusAction(false);//use bonus action
         caster.setFeyStep(caster.getFeyStep() - 1);//use feystep
 
@@ -786,7 +706,6 @@ public class main {
     }
 
     public static int anticipateWeakness(combatantObject caster){
-        System.out.println("Renn uses Anticipate Weakness");
         caster.setBonusAction(false);//use bonus action
         caster.setSpellPoints(caster.getSpellPoints() - 2);//subtract 2 spell points for a lv 1 spell
         
@@ -794,7 +713,6 @@ public class main {
     }
 
     public static void seeInvis(combatantObject caster, combatantObject target){
-        System.out.println("Renn uses See Invisibility");
         caster.setAction(false);
         caster.setSpellPoints(caster.getSpellPoints() - 3);
 
