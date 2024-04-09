@@ -9,15 +9,19 @@ public class main {
         boolean turn; //true=eva, false=renn
 
         //setting default values for beginning of turn reset
-        int evaAC = 15;
+        int evaAC = 20;
         int rennAC = 20;
         
         Scanner input = new Scanner(System.in);
         System.out.println("How many rounds would you like to run?");
         int matches = input.nextInt();
 
-        for(int i = 0; i < 1; i++){
-            combatantObject Eva = new combatantObject(84, evaAC, 0, 2, 4, 5, 1, 1, true);//declaring eva
+        int rennWins = 0;
+        int evaWins = 0;
+
+        for(int i = 0; i < matches; i++){
+            combatantObject Eva = new combatantObject(112, evaAC, 0, 2, 4, 5, 1, 1, true);//declaring eva
+            Eva.isRennOrEva();
             combatantObject Renn = new combatantObject(76, rennAC, 5, 0, 3, 0, 2, 3, false);//declaring renn
 
             Random rand = new Random();//initializing rng
@@ -49,6 +53,8 @@ public class main {
                 Renn.setMovement(30);
 
                 if(turn) {
+                    System.out.println("Eva's Turn");
+                    Eva.isRennOrEva();
                     round++;
                     //Eva behavior
                     if (round == 1){
@@ -197,17 +203,11 @@ public class main {
                 else {
                     //Renn behavior
                     if(Eva.isInvis()){
-                        seeInvis(Eva, Renn);
+                        seeInvis(Renn, Eva);
                         if(distance > 65){
                             Renn.setMovement(0);
                             distance -= 30;
                             feyStep(Renn, Eva, distance);
-                            if(distance > 30){
-                                rennRangedAttack(Renn, Eva, -1);
-                            }
-                            else{
-                                rennRangedAttack(Renn, Eva, 0);
-                            }
                             
                         }
                         else if(distance <= 65 && distance > 35){
@@ -219,8 +219,6 @@ public class main {
                         else{
                             Renn.setMovement(Renn.getMovement() - (distance - 5));
                             distance = 5;
-                            rennAttack(Renn, Eva, 0, 0);
-                            rennBonusAttack(Renn, Eva, 0, 0);
                         }
                     }
                     else{
@@ -234,7 +232,65 @@ public class main {
                                 rennRangedAttack(Renn, Eva, -1);
                             }
                         }
+                        else if(Eva.isSom()){
+                            if(distance > 65){
+                                Renn.setMovement(0);
+                                distance -= 30;
+                                feyStep(Renn, Eva, distance);
+                                
+                            }
+                            else if(distance <= 65 && distance > 35){
+                                Renn.setMovement(0);
+                                distance -= 30;
+                                feyStep(Renn, Eva, distance);
+                                rennReaction(Renn, Eva, 0, 0);
+                            }
+                            else{
+                                Renn.setMovement(Renn.getMovement() - (distance - 5));
+                                distance = 5;
+                                anticipateWeakness(Renn);
+
+                                if(Renn.getSpellPoints() >= 3){
+                                    rennReaction(Renn, Eva, 3, 0);
+                                }
+                                else if(Renn.getSpellPoints() == 2){
+                                    rennReaction(Renn, Eva, 2, 0);
+                                }
+                                else{
+                                    rennReaction(Renn, Eva, 0, 0);
+                                }
+
+                                if(Renn.getSpellPoints() >= 6){
+                                    rennAttack(Renn, Eva, 3, 0);
+                                }
+                                else if(Renn.getSpellPoints() == 4){
+                                    rennAttack(Renn, Eva, 2, 0);
+                                }
+                                else{
+                                    rennAttack(Renn, Eva, 0, 0);
+                                }
+                            }
+                        }
                         else{
+                            if(Renn.getHp() < 40){
+                                layOnHands(Renn);
+                                if(distance > 65){
+                                    Renn.setMovement(0);
+                                    distance -= 30;
+                                    feyStep(Renn, Eva, distance);
+                                    
+                                }
+                                else if(distance <= 65 && distance > 35){
+                                    Renn.setMovement(0);
+                                    distance -= 30;
+                                    feyStep(Renn, Eva, distance);
+                                    rennReaction(Renn, Eva, 0, 0);
+                                }
+                                else{
+                                    Renn.setMovement(Renn.getMovement() - (distance - 5));
+                                    distance = 5;
+                                }
+                            }
                             if(distance > 65){
                                 Renn.setMovement(0);
                                 distance -= 30;
@@ -252,6 +308,7 @@ public class main {
                                 distance -= 30;
                                 feyStep(Renn, Eva, distance);
                                 rennReaction(Renn, Eva, 0, 0);
+
                             }
                             else if(Eva.getHp() < 30){
                                 Renn.setMovement(Renn.getMovement() - (distance - 5));
@@ -287,15 +344,19 @@ public class main {
                         }
                     }
                 }
-                if(Renn.getHp() <= 0){
+                if(Renn.getHp() <= 0 && Eva.getHp() > 0){
                     System.out.println("Eva Wins");
+                    evaWins++;
                 }
-                if(Eva.getHp() <= 0){
+                if(Eva.getHp() <= 0 && Renn.getHp() > 0){
                     System.out.println("Renn Wins");
+                    rennWins++;
                 }
                 turn = !turn;
             }
         }
+        System.out.println("Renn won " + rennWins + " times.");
+        System.out.println("Eva won " + evaWins + " times.");
     }
 
     //basic attack function
@@ -309,6 +370,7 @@ public class main {
                         combatantObject target, 
                         int adv,
                         int slotUsed){
+        attacker.isRennOrEva();
         Random rand = new Random();//initializing rng
         int rand1 = (rand.nextInt(19) + 1);
         int rand2 = (rand.nextInt(19) + 1);//two rolls, in case advantage or disadvantage is involved
@@ -339,21 +401,19 @@ public class main {
                 break;
         }
         
-
-        if (toHit > target.getAC() && toHit - hitMod != 20){ //if attack roll hits before shield and is not a crit
-            if(toHit < target.getAC() + 5 && target.isReaction()){ //if shield would block the attack and the target has a reaction
-                if(target.getSlots() > 0 || target.getSpellPoints() >= 2){//if target has either the slots or the points for shield
-                    Shield(target.isRennOrEva(), target);         
-                    return false;           
-                }
+        if(toHit > target.getAC()){
+            if(toHit < target.getAC() + 5 && (target.getSlots() > 0 || target.getSpellPoints() >= 2)){
+                Shield(target);
+                System.out.println(target.toString());
+                return false;
             }
-            else{
-                damageCalc(dmgMod, src1Dice, src1Die, src2Dice, src2Die, attacker, target, slotUsed);
+            else if(toHit - hitMod == 20 && !target.isRennOrEva()){
+                damageCalc(dmgMod, 2 * src1Dice, src1Die, 2 * src2Dice, src2Die, attacker, target, slotUsed);
                 return true;
             }
         }
-        else if (toHit > target.getAC() && toHit - hitMod == 20 && target.isRennOrEva()) {
-            damageCalc(dmgMod, 2 * src1Dice, src1Die, 2 * src2Dice, src2Die, attacker, target, slotUsed);
+        else{
+            damageCalc(dmgMod, src1Dice, src1Die, src2Dice, src2Die, attacker, target, slotUsed);
             return true;
         }
         return false;
@@ -417,34 +477,39 @@ public class main {
             }
         }
 
+        if(target.isRennOrEva() && dmgTotal >= 20){
+            attacker.setHp(attacker.getHp() - dmgTotal);
+            target.setMutSuff(0);
+        }
+
         System.out.println("The attack deals " + dmgTotal + " damage");//printing damage for debugging purposes
         return dmgTotal;//return dmgTotal
     }
 
-    public static void Shield(boolean evaOrRenn, combatantObject target) {
-        if (evaOrRenn){
-            if (target.getL1Slots() > 0) {//use lv 1 slots if available
-                target.setL1Slots(target.getL1Slots() - 1);
+    public static void Shield(combatantObject caster) {
+        if (caster.isRennOrEva()){
+            if (caster.getL1Slots() > 0) {//use lv 1 slots if available
+                caster.setL1Slots(caster.getL1Slots() - 1);
             }
-            else if (target.getL2Slots() > 0) {//use lv 2 slots if available
-                target.setL2Slots(target.getL2Slots() - 1);
+            else if (caster.getL2Slots() > 0) {//use lv 2 slots if available
+                caster.setL2Slots(caster.getL2Slots() - 1);
             }
-            else if (target.getL3Slots() > 0) {//use lv 3 slots if available
-                target.setL3Slots(target.getL3Slots() - 1);
+            else if (caster.getL3Slots() > 0) {//use lv 3 slots if available
+                caster.setL3Slots(caster.getL3Slots() - 1);
             }
-            else if (target.getL4Slots() > 0) {//use lv 4 slots if available
-                target.setL4Slots(target.getL4Slots() - 1);
+            else if (caster.getL4Slots() > 0) {//use lv 4 slots if available
+                caster.setL4Slots(caster.getL4Slots() - 1);
             }
 
-            target.setAC(target.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
-            target.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
-            System.out.println("Eva uses shield");
+            caster.setAC(caster.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
+            caster.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
+            System.out.println("Eva uses shield");//debug message
         }
         else{
-            target.setSpellPoints(target.getSpellPoints() - 2);//subtract 2 spell points
-            target.setAC(target.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
-            target.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
-            System.out.println("Renn uses shield");
+            caster.setSpellPoints(caster.getSpellPoints() - 2);//subtract 2 spell points
+            caster.setAC(caster.getAC() + 5);//increase AC by 5 (remember to reset this at beginning of next round)
+            caster.setReaction(false);//set reaction to false (remember to reset this at beginning of next round)
+            System.out.println("Renn uses shield");//debug message
         }
     }
 
@@ -475,7 +540,7 @@ public class main {
 
     //Blood Shot
     public static void bloodShot(combatantObject attacker, combatantObject target, int adv, int slotUsed){
-        System.out.println("Eva uses Blood Shot")
+        System.out.println("Eva uses Blood Shot");
         attacker.setAction(false);//use action
         switch (slotUsed){//detrmine which level spell slot was used and subtract it
             case 2://if lv 2 slot used
@@ -559,7 +624,7 @@ public class main {
             Random rand = new Random();//initializing RNG
             if(rand.nextInt(19) + 1 + target.getCon() + target.getCha() < attacker.getSaveDC()){//rolling d20 + con mod + cha mod for aura of protection, if roll fails then it triggers the effect
                 target.setPoisoned(true);//target is poisoned if save fails
-                System.out.println("Renn fails the save and is poisoned")
+                System.out.println("Renn fails the save and is poisoned");
             }
             else{
                 System.out.println("Renn passes the Ray of Sickness save");
@@ -598,10 +663,21 @@ public class main {
     }
 
     public static void shadowOfMoil(combatantObject caster){
-        System.out.println("Eva casts Shadow of Moil");
-        caster.setAction(false);
-        caster.setL4Slots(caster.getL4Slots() - 1);
-        caster.setSom(true);
+        System.out.println("Eva casts Shadow of Moil");//debug message
+        caster.setAction(false);//use action
+        caster.setL4Slots(caster.getL4Slots() - 1);//use level 4 slot
+        caster.setSom(true);//set shadow of moil status to true
+        
+        Random rand = new Random();
+        int selfDmg = rand.nextInt(9) + rand.nextInt(9) + rand.nextInt(9) + 3;
+        caster.setHp(caster.getHp() - selfDmg);
+    }
+
+    public static void somDamage(combatantObject target){
+        Random rand = new Random();//initializing rng
+        int dmgTotal = rand.nextInt(7) + rand.nextInt(7) + 2;//roll 2d8 damage
+        target.setHp(target.getHp() - dmgTotal);//subtract dmgTotal from hp
+        System.out.println("Renn takes " + dmgTotal + " damage from Shadow of Moil");//debug message
     }
 
     public static void invis(combatantObject caster){
@@ -615,39 +691,73 @@ public class main {
         attacker.setReaction(false);//use reaction
 
         if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
-            System.out.println("Renn hits and uses " + pointsUsed + " Spell Points")
+            System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
             attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+
+            if(target.isSom()){
+                somDamage(attacker);//deal damage to renn if shadow of moil is active
+            }
+        }
+        else{
+            System.out.println("Renn misses");
         }
     }
 
     public static void rennAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
+        System.out.println("Renn uses her action to attack");
         attacker.setAction(false);//use action
 
         for(int i = 0; i < 2; i++){//do it twice
             if(Attack(9, 11, 1, 6, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
+                System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
                 attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+
+                if(target.isSom()){
+                    somDamage(attacker);//deal damage to renn if shadow of moil is active
+                }
+            }
+            else{
+                System.out.println("Renn misses");
             }
         }
+
+        
     }
 
     public static void rennRangedAttack(combatantObject attacker, combatantObject target, int adv){
+        System.out.println("Renn uses her javelins to attack");
         attacker.setAction(false);
         attacker.setJavelins(attacker.getJavelins() - 2);
 
         for(int i = 0; i < 2; i++){//do it twice
-            Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0);//make attack roll.
+            if(Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0)){//make attack roll.
+                System.out.println("Renn hits with a javelin");
+            }
+            else{
+                System.out.println("Renn misses");
+            }
         }
     }
 
     public static void rennBonusAttack(combatantObject attacker, combatantObject target, int pointsUsed, int adv){
+        System.out.println("Renn uses her bonus action to attack");
         attacker.setBonusAction(false);//use bonus action
 
         if(Attack(9, 11, 1, 4, pointsUsed, 8, attacker, target, adv, 0)) {//make attack roll. pointsUsed determines how many d8s will be used in the damage roll
+            System.out.println("Renn hits and uses " + pointsUsed + " Spell Points");
             attacker.setSpellPoints(attacker.getSpellPoints() - pointsUsed);//deduct spell points used if any, but only if attack lands
+
+            if(target.isSom()){
+                somDamage(attacker);//deal damage to renn if shadow of moil is active
+            }
+        }
+        else{
+            System.out.println("Renn misses");
         }
     }
 
     public static void layOnHands(combatantObject caster){
+        System.out.println("Renn uses Lay on Hands");
         caster.setAction(false);//use action
         if(caster.getHp() <= 36){//if renn's hp is less than or equal to 36
             caster.setHp(caster.getHp() + 40);//use all 40 lay on hands points
@@ -660,6 +770,7 @@ public class main {
     }
 
     public static int feyStep(combatantObject caster, combatantObject target, int distance){
+        System.out.println("Renn uses Feystep");
         caster.setBonusAction(false);//use bonus action
         caster.setFeyStep(caster.getFeyStep() - 1);//use feystep
 
@@ -675,6 +786,7 @@ public class main {
     }
 
     public static int anticipateWeakness(combatantObject caster){
+        System.out.println("Renn uses Anticipate Weakness");
         caster.setBonusAction(false);//use bonus action
         caster.setSpellPoints(caster.getSpellPoints() - 2);//subtract 2 spell points for a lv 1 spell
         
@@ -682,6 +794,7 @@ public class main {
     }
 
     public static void seeInvis(combatantObject caster, combatantObject target){
+        System.out.println("Renn uses See Invisibility");
         caster.setAction(false);
         caster.setSpellPoints(caster.getSpellPoints() - 3);
 

@@ -54,17 +54,19 @@ public class combatantObject {
         this.concentration = false;
 
         if (rennOrEva){
-            this.saveDC = 14;
+            this.rennOrEva = true;
+            this.saveDC = 17;
             this.l1Slots = 4;
             this.l2Slots = 3;
             this.l3Slots = 3;
-            this.l4Slots = 2;
+            this.l4Slots = 1;
             this.mutSuff = 1;
             this.sanBur = 5;
         }
         else{
-            this.saveDC = 17;
-            this.spellPoints = 17;
+            this.rennOrEva = false;
+            this.saveDC = 14;
+            this.spellPoints = 15;
             this.feyStep = 3;
             this.layOnHands = 1;
             this.javelins = 5;
@@ -156,6 +158,7 @@ public class combatantObject {
     }
 
     public boolean isRennOrEva() {
+        System.out.println(rennOrEva);
         return rennOrEva;
     }
 
@@ -333,10 +336,20 @@ public class combatantObject {
     }
 
     public void loseConcentration(){
+        System.out.println("Drop concentration");
         this.concentration = false;
-        
+
         this.som = false;
         this.bless = false;
         this.magicWeapon = false;
+    }
+
+    public String toString(){
+        if(rennOrEva == true){
+            return "This is Eva";
+        }
+        else{
+            return "This is Renn";
+        }
     }
 }
