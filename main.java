@@ -9,7 +9,7 @@ public class main {
         boolean turn; //true=eva, false=renn
 
         //setting default values for beginning of turn reset
-        int evaAC = 20;
+        int evaAC = 15;
         int rennAC = 20;
         
         Scanner input = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class main {
         int evaWins = 0;
 
         for(int i = 0; i < matches; i++){
-            combatantObject Eva = new combatantObject(112, 20, 0, 2, 4, 5, 1, 1, true);//declaring eva
+            combatantObject Eva = new combatantObject(84, evaAC, 0, 2, 4, 5, 1, 1, true);//declaring eva
             Eva.isRennOrEva();
             combatantObject Renn = new combatantObject(76, rennAC, 5, 0, 3, 0, 2, 3, false);//declaring renn
 
@@ -400,7 +400,6 @@ public class main {
         if(toHit > target.getAC()){
             if(toHit < target.getAC() + 5 && (target.getSlots() > 0 || target.getSpellPoints() >= 2)){
                 Shield(target);
-                System.out.println(target.toString());
                 return false;
             }
             else if(toHit - hitMod == 20 && !target.isRennOrEva()){

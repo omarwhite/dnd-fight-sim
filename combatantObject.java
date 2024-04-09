@@ -59,7 +59,7 @@ public class combatantObject {
             this.l1Slots = 4;
             this.l2Slots = 3;
             this.l3Slots = 3;
-            this.l4Slots = 1;
+            this.l4Slots = 2;
             this.mutSuff = 1;
             this.sanBur = 5;
         }
@@ -158,7 +158,6 @@ public class combatantObject {
     }
 
     public boolean isRennOrEva() {
-        System.out.println(rennOrEva);
         return rennOrEva;
     }
 
@@ -341,14 +340,5 @@ public class combatantObject {
         this.som = false;
         this.bless = false;
         this.magicWeapon = false;
-    }
-
-    public String toString(){
-        if(rennOrEva == true){
-            return "This is Eva";
-        }
-        else{
-            return "This is Renn";
-        }
     }
 }
