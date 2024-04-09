@@ -662,7 +662,7 @@ public class main {
         attacker.setJavelins(attacker.getJavelins() - 2);
 
         for(int i = 0; i < 2; i++){//do it twice
-            Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0)//make attack roll.
+            Attack(8, 10, 1, 6, 0, 0, attacker, target, adv, 0);//make attack roll.
         }
     }
 
