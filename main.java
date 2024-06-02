@@ -210,7 +210,7 @@ public class main {
                             Renn.setMovement(0);
                             distance -= 30;
                             feyStep(Renn, Eva, distance);
-                            rennReaction(Renn, Eva, 0, 0);
+                            //rennReaction(Renn, Eva, 0, 0);
                         }
                         else{
                             Renn.setMovement(Renn.getMovement() - (distance - 5));
@@ -239,13 +239,14 @@ public class main {
                                 Renn.setMovement(0);
                                 distance -= 30;
                                 feyStep(Renn, Eva, distance);
-                                rennReaction(Renn, Eva, 0, 0);
+                                //rennReaction(Renn, Eva, 0, 0);
                             }
                             else{
                                 Renn.setMovement(Renn.getMovement() - (distance - 5));
                                 distance = 5;
                                 anticipateWeakness(Renn);
 
+                                /*
                                 if(Renn.getSpellPoints() >= 3){
                                     rennReaction(Renn, Eva, 3, 0);
                                 }
@@ -255,6 +256,7 @@ public class main {
                                 else{
                                     rennReaction(Renn, Eva, 0, 0);
                                 }
+                                */
 
                                 if(Renn.getSpellPoints() >= 6){
                                     rennAttack(Renn, Eva, 3, 0);
@@ -280,7 +282,7 @@ public class main {
                                     Renn.setMovement(0);
                                     distance -= 30;
                                     feyStep(Renn, Eva, distance);
-                                    rennReaction(Renn, Eva, 0, 0);
+                                    //rennReaction(Renn, Eva, 0, 0);
                                 }
                                 else{
                                     Renn.setMovement(Renn.getMovement() - (distance - 5));
@@ -303,18 +305,21 @@ public class main {
                                 Renn.setMovement(0);
                                 distance -= 30;
                                 feyStep(Renn, Eva, distance);
-                                rennReaction(Renn, Eva, 0, 0);
+                                //rennReaction(Renn, Eva, 0, 0);
 
                             }
                             else if(Eva.getHp() < 30){
                                 Renn.setMovement(Renn.getMovement() - (distance - 5));
                                 distance = 5;
+                                
+                                /* 
                                 if(Renn.getSpellPoints() >= 3){
                                     rennReaction(Renn, Eva, 3, 0);
                                 }
                                 else{
                                     rennReaction(Renn, Eva, 0, 0);
                                 }
+                                */
 
                                 if(Renn.getSpellPoints() >= 3){
                                     rennAttack(Renn, Eva, 3, 0);

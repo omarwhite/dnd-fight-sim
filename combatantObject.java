@@ -55,7 +55,7 @@ public class combatantObject {
 
         if (rennOrEva){
             this.rennOrEva = true;
-            this.saveDC = 17;
+            this.saveDC = 18;
             this.l1Slots = 4;
             this.l2Slots = 3;
             this.l3Slots = 3;
@@ -65,9 +65,9 @@ public class combatantObject {
         }
         else{
             this.rennOrEva = false;
-            this.saveDC = 14;
-            this.spellPoints = 15;
-            this.feyStep = 3;
+            this.saveDC = 15;
+            this.spellPoints = 25;
+            this.feyStep = 4;
             this.layOnHands = 1;
             this.javelins = 5;
         }
